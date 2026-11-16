@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AeroDex — Commercial Aircraft Archive (1970s–2020s)</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            aero: {
+              950: '#040914',
+              900: '#081226',
+              850: '#0d1b36',
+              800: '#13264a',
+              accent: '#0ea5e9',
+              cyan: '#38bdf8',
+              amber: '#f59e0b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-aero-950 dark:text-slate-100 font-sans antialiased selection:bg-sky-500 selection:text-white transition-colors duration-200 min-h-screen flex flex-col">
+
+  <!-- Top Navigation Header -->
+  <header class="sticky top-0 z-30 backdrop-blur-md bg-white/85 dark:bg-aero-900/85 border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-500 to-blue-700 flex items-center justify-center shadow-lg shadow-sky-500/20 text-white">
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-lg tracking-tight">AeroDex</span>
+            <span class="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-600 dark:text-sky-400 border border-sky-500/30 font-semibold">1970s–2020s</span>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">Modern Commercial Jetliner Technical Encyclopedia</p>
+        </div>
+      </div>
+
+      <!-- Right Controls: Compare Tray Trigger, Unit Toggle, Theme Toggle -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Metric / Imperial Toggle -->
+        <button id="unitToggleBtn" onclick="toggleUnits()" title="Toggle Metric / Imperial Units"
+          class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono font-semibold bg-slate-100 hover:bg-slate-200 dark:bg-aero-850 dark:hover:bg-aero-800 border border-slate-200 dark:border-slate-700 transition">
+          <span id="unitLabel">METRIC (m / km)</span>
+        </button>
+
+        <!-- Compare Button -->
+        <button onclick="openCompareModal()"
+          class="relative flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-sky-600 hover:bg-sky-500 text-white shadow-md shadow-sky-600/20 transition">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          <span>Compare</span>
+          <span id="compareBadge" class="inline-flex items-center justify-center w-5 h-5 text-[11px] font-mono rounded-full bg-white text-sky-700 font-bold">0</span>
+        </button>
+
+        <!-- Dark/Light Theme Toggle -->
+        <button id="themeToggleBtn" onclick="toggleTheme()" aria-label="Toggle color theme"
+          class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-aero-850 dark:hover:bg-aero-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 transition">
+          <!-- Sun icon (shown in dark mode) -->
+          <svg id="sunIcon" class="w-4 h-4 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <!-- Moon icon (shown in light mode) -->
+          <svg id="moonIcon" class="w-4 h-4 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero & Quick Stats Banner -->
+  <section class="relative overflow-hidden border-b border-slate-200 dark:border-slate-800/80 bg-gradient-to-b from-sky-50/70 to-white dark:from-aero-900 dark:to-aero-950">
+    <!-- Subtle Blueprint Grid Pattern -->
+    <div class="absolute inset-0 opacity-[0.04] dark:opacity-[0.07] pointer-events-none"
+         style="background-image: linear-gradient(to right, #38bdf8 1px, transparent 1px), linear-gradient(to bottom, #38bdf8 1px, transparent 1px); background-size: 36px 36px;">
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 relative">
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-600 dark:text-sky-400 text-xs font-mono mb-3">
+            <span class="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></span>
+            COMMERCIAL JET AGE DATABASE • 1970–PRESENT
+          </div>
+          <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+            Half a Century of Commercial Airliners
+          </h1>
+          <p class="mt-2.5 text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+            Explore technical blueprints, dimensions, range envelopes, seating capacities, variants, maiden flights, and production timelines from the jumbo wide-body revolution of the 1970s to composite next-generation airliners.
+          </p>
+        </div>
+
+        <!-- Summary Telemetry Cards -->
+        <div class="grid grid-cols-3 gap-3 sm:gap-4 shrink-0">
+          <div class="p-3.5 rounded-2xl bg-white/80 dark:bg-aero-850/90 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+            <div class="text-[11px] font-mono uppercase text-slate-500 dark:text-slate-400">Aircraft Families</div>
+            <div id="statTotalCount" class="text-xl sm:text-2xl font-extrabold font-mono text-sky-600 dark:text-sky-400 mt-0.5">16</div>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-white/80 dark:bg-aero-850/90 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+            <div class="text-[11px] font-mono uppercase text-slate-500 dark:text-slate-400">Max Capacity</div>
+            <div class="text-xl sm:text-2xl font-extrabold font-mono text-emerald-600 dark:text-emerald-400 mt-0.5">853 <span class="text-xs font-normal">pax</span></div>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-white/80 dark:bg-aero-850/90 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+            <div class="text-[11px] font-mono uppercase text-slate-500 dark:text-slate-400">Longest Range</div>
+            <div id="statMaxRange" class="text-xl sm:text-2xl font-extrabold font-mono text-amber-600 dark:text-amber-400 mt-0.5">17,964 <span class="text-xs font-normal">km</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+    <!-- Filter & Search Control Bar -->
+    <div class="bg-white dark:bg-aero-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5 shadow-sm mb-6 space-y-4">
+      <!-- Top Row: Search Input & Sort Select -->
+      <div class="flex flex-col md:flex-row gap-3">
+        <!-- Search Input -->
+        <div class="relative flex-1">
+          <svg class="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input id="searchInput" type="text" placeholder="Search by aircraft model, manufacturer, variant (e.g. 747-400, A350, Dreamliner)..."
+            class="w-full pl-11 pr-10 py-2.5 rounded-xl bg-slate-50 dark:bg-aero-950 border border-slate-200 dark:border-slate-700/80 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 transition" />
+          <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Sort Dropdown -->
+        <div class="flex items-center gap-2 shrink-0">
+          <label for="sortSelect" class="text-xs font-mono uppercase text-slate-500 dark:text-slate-400 whitespace-nowrap">Sort by:</label>
+          <select id="sortSelect" onchange="applyFilters()"
+            class="w-full md:w-52 px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-aero-950 border border-slate-200 dark:border-slate-700/80 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-sky-500">
+            <option value="year-asc">Maiden Flight (Oldest First)</option>
+            <option value="year-desc">Maiden Flight (Newest First)</option>
+            <option value="range-desc">Maximum Range (High → Low)</option>
+            <option value="seats-desc">Max Seats (High → Low)</option>
+            <option value="wingspan-desc">Wingspan (Largest → Smallest)</option>
+            <option value="length-desc">Length (Longest → Shortest)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Filter Pills Rows -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 pt-2 border-t border-slate-100 dark:border-slate-800/80">
+        <!-- Manufacturer Filter -->
+        <div>
+          <span class="block text-[11px] font-mono uppercase tracking-wider text-slate-400 mb-1.5">Manufacturer</span>
+          <div id="manufacturerFilters" class="flex flex-wrap gap-1.5">
+            <button data-filter="All" onclick="setFilter('manufacturer', 'All')" class="filter-pill active px-3 py-1.5 rounded-lg text-xs font-semibold transition">All</button>
+            <button data-filter="Boeing" onclick="setFilter('manufacturer', 'Boeing')" class="filter-pill px-3 py-1.5 rounded-lg text-xs font-semibold transition">Boeing</button>
+            <button data-filter="Airbus" onclick="setFilter('manufacturer', 'Airbus')" class="filter-pill px-3 py-1.5 rounded-lg text-xs font-semibold transition">Airbus</button>
+            <button data-filter="Other" onclick="setFilter('manufacturer', 'Other')" class="filter-pill px-3 py-1.5 rounded-lg text-xs font-semibold transition">Other (McDonnell Douglas / COMAC / Embraer)</button>
+          </div>
+        </div>
+
+        <!-- Decade / Era Filter -->
+        <div>
+          <span class="block text-[11px] font-mono uppercase tracking-wider text-slate-400 mb-1.5">Introduction Decade</span>
+          <div id="decadeFilters" class="flex flex-wrap gap-1.5">
+            <button data-filter="All" onclick="setFilter('decade', 'All')" class="filter-pill active px-2.5 py-1.5 rounded-lg text-xs font-semibold transition">All</button>
+            <button data-filter="1970s" onclick="setFilter('decade', '1970s')" class="filter-pill px-2.5 py-1.5 rounded-lg text-xs font-semibold transition">1970s</button>
+            <button data-filter="1980s" onclick="setFilter('decade', '1980s')" class="filter-pill px-2.5 py-1.5 rounded-lg text-xs font-semibold transition">1980s</button>
+            <button data-filter="1990s" onclick="setFilter('decade', '1990s')" class="filter-pill px-2.5 py-1.5 rounded-lg text-xs font-semibold transition">1990s</button>
+            <button data-filter="2000s" onclick="setFilter('decade', '2000s')" class="filter-pill px-2.5 py-1.5 rounded-lg text-xs font-semibold transition">2000s</button>
+            <button data-filter="2010s+" onclick="setFilter('decade', '2010s+')" class="filter-pill px-2.5 py-1.5 rounded-lg text-xs font-semibold transition">2010s+</button>
+          </div>
+        </div>
+
+        <!-- Body Type Filter -->
+        <div>
+          <span class="block text-[11px] font-mono uppercase tracking-wider text-slate-400 mb-1.5">Fuselage / Body Type</span>
+          <div id="bodyFilters" class="flex flex-wrap gap-1.5">
+            <button data-filter="All" onclick="setFilter('body', 'All')" class="filter-pill active px-3 py-1.5 rounded-lg text-xs font-semibold transition">All</button>
+            <button data-filter="Narrow-body" onclick="setFilter('body', 'Narrow-body')" class="filter-pill px-3 py-1.5 rounded-lg text-xs font-semibold transition">Narrow-body</button>
+            <button data-filter="Wide-body" onclick="setFilter('body', 'Wide-body')" class="filter-pill px-3 py-1.5 rounded-lg text-xs font-semibold transition">Wide-body</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Results Count & Reset -->
+      <div class="flex items-center justify-between pt-2 text-xs text-slate-500 dark:text-slate-400">
+        <span>Showing <strong id="visibleCount" class="text-slate-900 dark:text-white font-mono">0</strong> aircraft models</span>
+        <button id="resetFiltersBtn" onclick="resetAllFilters()" class="hidden text-sky-600 dark:text-sky-400 hover:underline font-medium">
+          Reset all filters
+        </button>
+      </div>
+    </div>
+
+    <!-- Aircraft Cards Grid -->
+    <div id="aircraftGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      <!-- Populated dynamically via JS -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden text-center py-16 px-4 rounded-2xl bg-white dark:bg-aero-900 border border-slate-200 dark:border-slate-800">
+      <div class="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-aero-850 flex items-center justify-center mx-auto mb-4 text-slate-400">
+        <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <h3 class="text-lg font-bold">No matching aircraft found</h3>
+      <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-md mx-auto">Try adjusting your search keywords, era selection, or manufacturer filters.</p>
+      <button onclick="resetAllFilters()" class="mt-4 px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-sm font-semibold transition">
+        Reset Filters
+      </button>
+    </div>
+
+  </main>
+
+  <!-- Floating Compare Bar (Appears when 1+ aircraft selected) -->
+  <div id="floatingCompareBar" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-30 hidden w-[94%] max-w-2xl bg-slate-900/95 dark:bg-aero-850/95 backdrop-blur-md text-white border border-slate-700/80 rounded-2xl shadow-2xl px-4 py-3 flex items-center justify-between gap-3">
+    <div class="flex items-center gap-2.5 overflow-x-auto py-0.5" id="compareChipsContainer">
+      <!-- Chips inserted dynamically -->
+    </div>
+    <div class="flex items-center gap-2 shrink-0">
+      <button onclick="clearCompare()" class="px-2.5 py-1.5 rounded-lg text-xs text-slate-300 hover:text-white hover:bg-slate-800 transition">Clear</button>
+      <button onclick="openCompareModal()" class="px-3.5 py-1.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs sm:text-sm transition">
+        Compare Now
+      </button>
+    </div>
+  </div>
+
+  <!-- Full Specifications Detail Modal -->
+  <div id="detailModal" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-6 bg-slate-950/75 backdrop-blur-sm overflow-y-auto">
+    <div class="relative w-full max-w-4xl bg-white dark:bg-aero-900 border border-slate-200 dark:border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col">
+      <!-- Modal Header -->
+      <div class="px-5 sm:px-7 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-4 bg-slate-50/80 dark:bg-aero-950/60">
+        <div>
+          <div class="flex items-center gap-2">
+            <span id="modalManufacturerBadge" class="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold uppercase bg-sky-500/15 text-sky-600 dark:text-sky-400">BOEING</span>
+            <span id="modalEraBadge" class="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-300">1970s</span>
+            <span id="modalStatusBadge" class="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold">In Production</span>
+          </div>
+          <h2 id="modalTitle" class="text-xl sm:text-2xl font-extrabold mt-1">Boeing 747</h2>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="modalCompareBtn" onclick="" class="px-3.5 py-2 rounded-xl text-xs font-semibold border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-aero-800 transition">
+            + Compare
+          </button>
+          <button onclick="closeDetailModal()" aria-label="Close modal" class="p-2 rounded-xl bg-slate-200/70 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 transition">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Scrollable Content -->
+      <div id="modalBody" class="p-5 sm:p-7 overflow-y-auto space-y-6">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Side-by-Side Comparison Modal -->
+  <div id="compareModal" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-6 bg-slate-950/75 backdrop-blur-sm overflow-y-auto">
+    <div class="relative w-full max-w-5xl bg-white dark:bg-aero-900 border border-slate-200 dark:border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col">
+      <!-- Header -->
+      <div class="px-5 sm:px-7 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-4 bg-slate-50/80 dark:bg-aero-950/60">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-extrabold">Aircraft Comparison Studio</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Select up to 3 commercial aircraft to compare dimensions, capacity, and performance</p>
+        </div>
+        <button onclick="closeCompareModal()" aria-label="Close comparison" class="p-2 rounded-xl bg-slate-200/70 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 transition">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Content -->
+      <div id="compareModalBody" class="p-5 sm:p-7 overflow-y-auto space-y-6">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastNotification" class="fixed top-20 right-4 z-50 transform translate-x-full opacity-0 transition-all duration-300 pointer-events-none">
+    <div id="toastMessage" class="px-4 py-3 rounded-xl bg-slate-900 dark:bg-sky-600 text-white text-xs sm:text-sm font-medium shadow-xl border border-slate-700 dark:border-sky-400">
+      Notification
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 dark:border-slate-800/80 bg-white dark:bg-aero-950 py-6 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 dark:text-slate-400">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-700 dark:text-slate-200">AeroDex</span>
+        <span>• Commercial Aircraft Historical & Technical Reference (1970s–2020s)</span>
+      </div>
+      <div class="font-mono">
+        Specs reflect representative primary/flagship variants per family
+      </div>
+    </div>
+  </footer>
+
+  <!-- Custom Styles for Filter Pills -->
+  <style>
+    .filter-pill {
+      background-color: rgb(241 245 249);
+      color: rgb(71 85 105);
+      border: 1px solid rgb(226 232 240);
+    }
+    .dark .filter-pill {
+      background-color: #081226;
+      color: rgb(148 163 184);
+      border: 1px solid rgb(30 41 59);
+    }
+    .filter-pill:hover {
+      border-color: #0ea5e9;
+      color: #0ea5e9;
+    }
+    .filter-pill.active {
+      background-color: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);
+    }
+    .dark .filter-pill.active {
+      background-color: #0ea5e9;
+      color: #040914;
+      border-color: #0ea5e9;
+    }
+  </style>
+
+  <!-- Main Application Script -->
+  <script>
+    // =========================================================================
+    // 1. COMMERCIAL AIRCRAFT DATABASE (1970s – 2020s)
+    // =========================================================================
+    const AIRCRAFT_DB = [
+      {
+        id: 'b747',
+        name: 'Boeing 747',
+        nickname: 'Queen of the Skies',
+        manufacturer: 'Boeing',
+        mfgGroup: 'Boeing',
+        decade: '1970s',
+        bodyType: 'Wide-body',
+        fuselageTag: 'Partial Double-Deck Wide-body',
+        // Dimensions (flagship -400 / -8 representative values)
+        lengthM: 76.3,
+        lengthFt: 250.2,
+        wingspanM: 68.4,
+        wingspanFt: 224.4,
+        heightM: 19.4,
+        rangeKm: 14320,
+        rangeNm: 7730,
+        maxSeats: 660,
+        typicalSeats: '416–467 (3-class)',
+        variants: ['747-100', '747SP', '747-200', '747-300', '747-400', '747-8I', '747-8F'],
+        maidenFlight: 'February 9, 1969 (EIS: Jan 22, 1970)',
+        maidenYear: 1970,
+        lastProduction: '2023 (1,574 built)',
+        inProduction: false,
+        cruiseSpeed: 'Mach 0.855 (939 km/h)',
+        mtow: '447,700 kg (987,000 lb)',
+        engines: '4× Pratt & Whitney JT9D / RB211 / CF6 / GEnx-2B67',
+        silhouetteType: 'quad-double',
+        overview: 'Introduced into commercial service in January 1970, the Boeing 747 revolutionized long-haul air travel as the world’s first wide-body twin-aisle airliner. Its distinctive upper-deck hump made it an instant aviation icon for over five decades until the final 747-8 freighter rolled off the Everett line in 2023.'
+      },
+      {
+        id: 'dc10',
+        name: 'McDonnell Douglas DC-10',
+        nickname: 'Trijet Pioneer',
+        manufacturer: 'McDonnell Douglas',
+        mfgGroup: 'Other',
+        decade: '1970s',
+        bodyType: 'Wide-body',
+        fuselageTag: 'Wide-body Trijet',
+        lengthM: 55.5,
+        lengthFt: 182.1,
+        wingspanM: 50.4,
+        wingspanFt: 165.3,
+        heightM: 17.7,
+        rangeKm: 10620,
+        rangeNm: 5730,
+        maxSeats: 380,
+        typicalSeats: '250–270 (3-class)',
+        variants: ['DC-10-10', 'DC-10-15', 'DC-10-30', 'DC-10-40', 'KC-10 Extender'],
+        maidenFlight: 'August 29, 1970 (EIS: Aug 5, 1971)',
+        maidenYear: 1970,
+        lastProduction: '1989 (386 built)',
+        inProduction: false,
+        cruiseSpeed: 'Mach 0.82 (908 km/h)',
+        mtow: '259,500 kg (572,000 lb)',
+        engines: '3× General Electric CF6-50 / Pratt & Whitney JT9D',
+        silhouetteType: 'trijet',
+        overview: 'Developed to offer wide-body capacity on routes shorter and thinner than those served by the Boeing 747, the DC-10 became a staple of transcontinental and intercontinental fleets in the 1970s and 1980s, recognizable by its tail-mounted number-two turbofan engine.'
+      },
+      {
+        id: 'l1011',
+        name: 'Lockheed L-1011 TriStar',
+        nickname: 'The Whisperliner',
+        manufacturer: 'Lockheed',
+        mfgGroup: 'Other',
+        decade: '1970s',
+        bodyType: 'Wide-body',
+        fuselageTag: 'Wide-body Trijet',
+        lengthM: 54.2,
+        lengthFt: 177.7,
+        wingspanM: 50.1,
+        wingspanFt: 164.3,
+        heightM: 16.9,
+        rangeKm: 9905,
+        rangeNm: 5345,
+        maxSeats: 400,
+        typicalSeats: '246–256 (3-class)',
+        variants: ['L-1011-1', 'L-1011-100', 'L-1011-200', 'L-1011-250', 'L-1011-500'],
+        maidenFlight: 'November 16, 1970 (EIS: Apr 26, 1972)',
+        maidenYear: 1970,
+        lastProduction: '1984 (250 built)',
+        inProduction: false,
+        cruiseSpeed: 'Mach 0.83 (920 km/h)',
+        mtow: '231,330 kg (510,000 lb)',
+        engines: '3× Rolls-Royce RB211-524B',
+        silhouetteType: 'trijet-sduct',
+        overview: 'Renowned for technological sophistication—including the first FAA-certified Category IIIB autoland system—the L-1011 TriStar featured an S-duct tail engine intake and Rolls-Royce RB211 three-spool turbofans. It was Lockheed’s final commercial airliner.'
+      },
+      {
+        id: 'a300',
+        name: 'Airbus A300',
+        nickname: 'First Twin-Engine Wide-body',
+        manufacturer: 'Airbus',
+        mfgGroup: 'Airbus',
+        decade: '1970s',
+        bodyType: 'Wide-body',
+        fuselageTag: 'Wide-body Twinjet',
+        lengthM: 54.1,
+        lengthFt: 177.5,
+        wingspanM: 44.8,
+        wingspanFt: 147.1,
+        heightM: 16.6,
+        rangeKm: 7500,
+        rangeNm: 4050,
+        maxSeats: 345,
+        typicalSeats: '247–266 (2-class)',
+        variants: ['A300B1', 'A300B2', 'A300B4', 'A300-600', 'A300-600R', 'A300-600F'],
+        maidenFlight: 'October 28, 1972 (EIS: May 23, 1974)',
+        maidenYear: 1972,
+        lastProduction: '2007 (561 built)',
+        inProduction: false,
+        cruiseSpeed: 'Mach 0.78 (850 km/h)',
+        mtow: '171,700 kg (378,500 lb)',
+        engines: '2× GE CF6-80C2 / Pratt & Whitney PW4000',
+        silhouetteType: 'wide-twin',
+        overview: 'The founding aircraft of the Airbus consortium and the world’s first twin-engine wide-body airliner. Initially met with skepticism over twin-engine overwater reliability, its operating economics paved the way for ETOPS regulations and modern twinjet dominance.'
+      },
+      {
+        id: 'b767',
+        name: 'Boeing 767',
+        nickname: 'ETOPS Transatlantic Pioneer',
+        manufacturer: 'Boeing',
+        mfgGroup: 'Boeing',
+        decade: '1980s',
+        bodyType: 'Wide-body',
+        fuselageTag: 'Medium Wide-body Twinjet',
+        lengthM: 61.4,
+        lengthFt: 201.3,
+        wingspanM: 51.9,
+        wingspanFt: 170.3,
+        heightM: 15.9,
+        rangeKm: 11070,
+        rangeNm: 5980,
+        maxSeats: 375,
+        typicalSeats: '214–269 (2-class)',
+        variants: ['767-200', '767-200ER', '767-300', '767-300ER', '767-300F', '767-400ER', 'KC-46'],
+        maidenFlight: 'September 26, 1981 (EIS: Sep 8, 1982)',
+        maidenYear: 1981,
+        lastProduction: 'In Production (Freighter / Tanker)',
+        inProduction: true,
+        cruiseSpeed: 'Mach 0.80 (851 km/h)',
+        mtow: '204,120 kg (450,000 lb)',
+        engines: '2× GE CF6-80C2 / PW4000 / RB211-524H',
+        silhouetteType: 'wide-twin',
+        overview: 'Boeing’s first wide-body twinjet featured a two-crew glass cockpit shared with the 757 and a unique 7-abreast cabin cross-section. The 767 pioneered ETOPS transatlantic operations in 1985, permanently shifting long-haul routes away from three- and four-engine jets.'
+      },
+      {
+        id: 'b757',
+        name: 'Boeing 757',
+        nickname: 'The Flying Pencil',
+        manufacturer: 'Boeing',
+        mfgGroup: 'Boeing',
+        decade: '1980s',
+        bodyType: 'Narrow-body',
+        fuselageTag: 'Long-Range Narrow-body',
+        lengthM: 54.4,
+        lengthFt: 178.6,
+        wingspanM: 38.1,
+        wingspanFt: 124.8,
+        heightM: 13.6,
+        rangeKm: 7250,
+        rangeNm: 3915,
+        maxSeats: 295,
+        typicalSeats: '200–243 (2-class)',
+        variants: ['757-200', '757-200PF', '757-200M', '757-300'],
+        maidenFlight: 'February 19, 1982 (EIS: Jan 1, 1983)',
+        maidenYear: 1982,
+        lastProduction: '2004 (1,050 built)',
+        inProduction: false,
+        cruiseSpeed: 'Mach 0.80 (850 km/h)',
+        mtow: '123,600 kg (272,500 lb)',
+        engines: '2× Rolls-Royce RB211-535 / Pratt & Whitney PW2000',
+        silhouetteType: 'narrow-long',
+        overview: 'Famed for its high thrust-to-weight ratio, hot-and-high airport performance, and slender fuselage, the Boeing 757 bridged the gap between narrow-body and wide-body markets, opening secondary transatlantic routes previously impossible for single-aisle jets.'
+      },
+      {
+        id: 'a320',
+        name: 'Airbus A320 Family',
+        nickname: 'Fly-by-Wire Revolution',
+        manufacturer: 'Airbus',
+        mfgGroup: 'Airbus',
+        decade: '1980s',
+        bodyType: 'Narrow-body',
+        fuselageTag: 'Short/Medium-Haul Narrow-body',
+        lengthM: 37.6,
+        lengthFt: 123.3,
+        wingspanM: 35.8,
+        wingspanFt: 117.4,
+        heightM: 11.8,
+        rangeKm: 6300,
+        rangeNm: 3400,
+        maxSeats: 244,
+        typicalSeats: '150–180 (A320) / 185–220 (A321)',
+        variants: ['A318', 'A319', 'A320ceo', 'A321ceo', 'A319neo', 'A320neo', 'A321neo', 'A321XLR'],
+        maidenFlight: 'February 22, 1987 (EIS: Apr 18, 1988)',
+        maidenYear: 1987,
+        lastProduction: 'In Production (11,500+ delivered)',
+        inProduction: true,
+        cruiseSpeed: 'Mach 0.78 (828 km/h)',
+        mtow: '79,000 kg (A320neo) / 101,000 kg (A321XLR)',
+        engines: '2× CFM56 / IAE V2500 / CFM LEAP-1A / PW1100G',
+        silhouetteType: 'narrow-std',
+        overview: 'The Airbus A320 introduced digital fly-by-wire flight controls and side-stick controllers to commercial aviation. With the re-engined neo family and ultra-long-range A321XLR, it has become the best-selling commercial jetliner family in aviation history.'
+      },
+      {
+        id: 'a340',
+        name: 'Airbus A340',
+        nickname: 'Four-Engine Ultra-Long-Hauler',
+        manufacturer: 'Airbus',
+        mfgGroup: 'Airbus',
+        decade: '1990s',
+        bodyType: 'Wide-body',
+        fuselageTag: 'Long-Haul Quadjet Wide-body',
+        lengthM: 75.4,
+        lengthFt: 247.3,
+        wingspanM: 63.5,
+        wingspanFt: 208.2,
+        heightM: 17.3,
+        rangeKm: 16670,
+        rangeNm: 9000,
+        maxSeats: 475,
+        typicalSeats: '295–359 (3-class)',
+        variants: ['A340-200', 'A340-300', 'A340-500', 'A340-600'],
+        maidenFlight: 'October 25, 1991 (EIS: Mar 15, 1993)',
+        maidenYear: 1991,
+        lastProduction: '2011 (377 built)',
+        inProduction: false,
+        cruiseSpeed: 'Mach 0.83 (881 km/h)',
+        mtow: '380,000 kg (837,800 lb)',
+        engines: '4× CFM56-5C / Rolls-Royce Trent 500',
+        silhouetteType: 'quad-single',
+        overview: 'Designed alongside the twin-engine A330 to bypass 1990s ETOPS restrictions on polar and trans-Pacific routes, the A340-500 briefly operated the world’s longest non-stop flights (Singapore–Newark), while the A340-600 was the longest commercial airliner until the 747-8.'
+      },
+      {
+        id: 'a330',
+        name: 'Airbus A330',
+        nickname: 'Versatile Wide-body Workhorse',
+        manufacturer: 'Airbus',
+        mfgGroup: 'Airbus',
+        decade: '1990s',
+        bodyType: 'Wide-body',
+        fuselageTag: 'Medium/Long-Haul Wide-body',
+        lengthM: 63.7,
+        lengthFt: 208.9,
+        wingspanM: 64.0,
+        wingspanFt: 210.0,
+        heightM: 16.8,
+        rangeKm: 13334,
+        rangeNm: 7200,
+        maxSeats: 460,
+        typicalSeats: '250–300 (3-class)',
+        variants: ['A330-200', 'A330-300', 'A330-200F', 'A330-800neo', 'A330-900neo', 'A330 MRTT'],
+        maidenFlight: 'November 2, 1992 (EIS: Jan 17, 1994)',
+        maidenYear: 1992,
+        lastProduction: 'In Production (A330neo)',
+        inProduction: true,
+        cruiseSpeed: 'Mach 0.82 (871 km/h)',
+        mtow: '251,000 kg (553,400 lb)',
+        engines: '2× Trent 700 / CF6 / PW4000 / Rolls-Royce Trent 7000',
+        silhouetteType: 'wide-twin',
+        overview: 'Sharing its wing and fuselage cross-section with the A340, the twin-engine A330 proved vastly more economical as ETOPS rules expanded. Upgraded into the A330neo with Rolls-Royce Trent 7000 engines and composite sharklets, it remains in active production.'
+      },
+      {
+        id: 'b777',
+        name: 'Boeing 777',
+        nickname: 'Triple Seven',
+        manufacturer: 'Boeing',
+        mfgGroup: 'Boeing',
+        decade: '1990s',
+        bodyType: 'Wide-body',
+        fuselageTag: 'Large Long-Haul Wide-body',
+        lengthM: 73.9,
+        lengthFt: 242.3,
+        wingspanM: 64.8,
+        wingspanFt: 212.6,
+        heightM: 18.5,
+        rangeKm: 15843,
+        rangeNm: 8555,
+        maxSeats: 550,
+        typicalSeats: '314–396 (2/3-class)',
+        variants: ['777-200', '777-200ER', '777-200LR', '777-300', '777-300ER', '777F', '777-8', '777-9'],
+        maidenFlight: 'June 12, 1994 (EIS: Jun 7, 1995)',
+        maidenYear: 1994,
+        lastProduction: 'In Production (777F / 777X)',
+        inProduction: true,
+        cruiseSpeed: 'Mach 0.84 (892 km/h)',
+        mtow: '351,530 kg (775,000 lb)',
+        engines: '2× GE90-115B / PW4000 / Trent 800 / GE9X',
+        silhouetteType: 'wide-twin',
+        overview: 'The first commercial aircraft designed entirely via 3D CAD, the Boeing 777 replaced aging quadjets on global trunk routes. Powered by massive GE90 turbofans—the largest jet engines in service—the 777-300ER became the backbone of international long-haul fleets.'
+      },
+      {
+        id: 'a380',
+        name: 'Airbus A380',
+        nickname: 'Superjumbo',
+        manufacturer: 'Airbus',
+        mfgGroup: 'Airbus',
+        decade: '2000s',
+        bodyType: 'Wide-body',
+        fuselageTag: 'Full-Length Double-Deck Wide-body',
+        lengthM: 72.7,
+        lengthFt: 238.6,
+        wingspanM: 79.8,
+        wingspanFt: 261.7,
+        heightM: 24.1,
+        rangeKm: 14800,
+        rangeNm: 8000,
+        maxSeats: 853,
+        typicalSeats: '525–575 (3-class)',
+        variants: ['A380-800', 'A380plus (proposed)'],
+        maidenFlight: 'April 27, 2005 (EIS: Oct 25, 2007)',
+        maidenYear: 2005,
+        lastProduction: '2021 (251 built)',
+        inProduction: false,
+        cruiseSpeed: 'Mach 0.85 (903 km/h)',
+        mtow: '575,000 kg (1,268,000 lb)',
+        engines: '4× Rolls-Royce Trent 900 / Engine Alliance GP7200',
+        silhouetteType: 'superjumbo',
+        overview: 'The largest passenger airliner ever built, featuring two full-length passenger decks capable of accommodating up to 853 passengers in an all-economy layout. Beloved by passengers for its quiet cabin and onboard lounges, production concluded in 2021 as airlines shifted toward twinjets.'
+      },
+      {
+        id: 'ejet',
+        name: 'Embraer E-Jet / E2 Family',
+        nickname: 'Crossover Regional-Mainline Jet',
+        manufacturer: 'Embraer',
+        mfgGroup: 'Other',
+        decade: '2000s',
+        bodyType: 'Narrow-body',
+        fuselageTag: '2+2 Narrow-body Regional/Mainline',
+        lengthM: 41.5,
+        lengthFt: 136.2,
+        wingspanM: 35.1,
+        wingspanFt: 115.2,
+        heightM: 10.9,
+        rangeKm: 5278,
+        rangeNm: 2850,
+        maxSeats: 146,
+        typicalSeats: '100–132 (1/2-class)',
+        variants: ['E170', 'E175', 'E190', 'E195', 'E175-E2', 'E190-E2', 'E195-E2'],
+        maidenFlight: 'February 19, 2002 (EIS: Mar 17, 2004)',
+        maidenYear: 2002,
+        lastProduction: 'In Production (E175 & E2)',
+        inProduction: true,
+        cruiseSpeed: 'Mach 0.82 (870 km/h)',
+        mtow: '61,500 kg (135,584 lb)',
+        engines: '2× GE CF34 / Pratt & Whitney PW1900G',
+        silhouetteType: 'narrow-std',
+        overview: 'Brazilian manufacturer Embraer’s E-Jet series eliminated the unpopular middle seat in the 70-to-146-seat market with a double-bubble 2+2 cabin cross-section. The second-generation E195-E2 features high-aspect-ratio wings and geared turbofans.'
+      },
+      {
+        id: 'b787',
+        name: 'Boeing 787 Dreamliner',
+        nickname: 'Composite Point-to-Point Pioneer',
+        manufacturer: 'Boeing',
+        mfgGroup: 'Boeing',
+        decade: '2000s',
+        bodyType: 'Wide-body',
+        fuselageTag: 'Composite Mid-Size Wide-body',
+        lengthM: 68.3,
+        lengthFt: 224.0,
+        wingspanM: 60.1,
+        wingspanFt: 197.3,
+        heightM: 17.0,
+        rangeKm: 14010,
+        rangeNm: 7565,
+        maxSeats: 440,
+        typicalSeats: '248–336 (2-class)',
+        variants: ['787-8', '787-9', '787-10'],
+        maidenFlight: 'December 15, 2009 (EIS: Oct 26, 2011)',
+        maidenYear: 2009,
+        lastProduction: 'In Production',
+        inProduction: true,
+        cruiseSpeed: 'Mach 0.85 (903 km/h)',
+        mtow: '254,011 kg (560,000 lb)',
+        engines: '2× General Electric GEnx-1B / Rolls-Royce Trent 1000',
+        silhouetteType: 'wide-twin',
+        overview: 'Constructed with 50% carbon-fiber-reinforced polymer by weight, the Boeing 787 Dreamliner introduced bleedless electrical architecture, raked wingtips, lower cabin altitude (6,000 ft), higher humidity, and large electrochromic dimmable windows.'
+      },
+      {
+        id: 'a350',
+        name: 'Airbus A350',
+        nickname: 'XWB Composite Flagship',
+        manufacturer: 'Airbus',
+        mfgGroup: 'Airbus',
+        decade: '2010s+',
+        bodyType: 'Wide-body',
+        fuselageTag: 'Extra-Wide-Body Composite Twinjet',
+        lengthM: 73.8,
+        lengthFt: 242.1,
+        wingspanM: 64.8,
+        wingspanFt: 212.4,
+        heightM: 17.1,
+        rangeKm: 17964,
+        rangeNm: 9700,
+        maxSeats: 480,
+        typicalSeats: '300–410 (3-class)',
+        variants: ['A350-900', 'A350-900ULR', 'A350-1000', 'A350F'],
+        maidenFlight: 'June 14, 2013 (EIS: Jan 15, 2015)',
+        maidenYear: 2013,
+        lastProduction: 'In Production',
+        inProduction: true,
+        cruiseSpeed: 'Mach 0.85 (903 km/h)',
+        mtow: '319,000 kg (703,275 lb)',
+        engines: '2× Rolls-Royce Trent XWB-84 / XWB-97',
+        silhouetteType: 'wide-twin',
+        overview: 'Built with 53% composite structures and curved blended winglets, the A350 Extra Wide Body (XWB) powers the world’s longest commercial non-stop routes (such as Singapore–New York on the A350-900ULR) while offering industry-leading fuel efficiency.'
+      },
+      {
+        id: 'b737max',
+        name: 'Boeing 737 MAX',
+        nickname: 'Fourth-Generation 737',
+        manufacturer: 'Boeing',
+        mfgGroup: 'Boeing',
+        decade: '2010s+',
+        bodyType: 'Narrow-body',
+        fuselageTag: 'Short/Medium-Haul Narrow-body',
+        lengthM: 43.8,
+        lengthFt: 143.7,
+        wingspanM: 35.9,
+        wingspanFt: 117.8,
+        heightM: 12.3,
+        rangeKm: 7130,
+        rangeNm: 3850,
+        maxSeats: 230,
+        typicalSeats: '162–204 (2-class)',
+        variants: ['737 MAX 7', '737 MAX 8', '737 MAX 8-200', '737 MAX 9', '737 MAX 10'],
+        maidenFlight: 'January 29, 2016 (EIS: May 22, 2017)',
+        maidenYear: 2016,
+        lastProduction: 'In Production',
+        inProduction: true,
+        cruiseSpeed: 'Mach 0.79 (839 km/h)',
+        mtow: '89,765 kg (197,900 lb)',
+        engines: '2× CFM International LEAP-1B',
+        silhouetteType: 'narrow-std',
+        overview: 'The fourth generation of Boeing’s legendary 737 lineage, incorporating high-bypass CFM LEAP-1B engines, Advanced Technology split-tip winglets, a redesigned tail cone, and Boeing Sky Interior enhancements for a 14–20% fuel burn reduction over the 737 NG.'
+      },
+      {
+        id: 'a220',
+        name: 'Airbus A220 (CSeries)',
+        nickname: 'Clean-Sheet Small Single-Aisle',
+        manufacturer: 'Airbus (orig. Bombardier)',
+        mfgGroup: 'Airbus',
+        decade: '2010s+',
+        bodyType: 'Narrow-body',
+        fuselageTag: '5-Abreast Clean-Sheet Narrow-body',
+        lengthM: 38.7,
+        lengthFt: 127.0,
+        wingspanM: 35.1,
+        wingspanFt: 115.1,
+        heightM: 11.5,
+        rangeKm: 6667,
+        rangeNm: 3600,
+        maxSeats: 160,
+        typicalSeats: '120–145 (2-class)',
+        variants: ['A220-100 (CS100)', 'A220-300 (CS300)'],
+        maidenFlight: 'September 16, 2013 (EIS: Jul 15, 2016)',
+        maidenYear: 2016,
+        lastProduction: 'In Production',
+        inProduction: true,
+        cruiseSpeed: 'Mach 0.82 (871 km/h)',
+        mtow: '70,900 kg (156,300 lb)',
+        engines: '2× Pratt & Whitney PW1500G Geared Turbofan',
+        silhouetteType: 'narrow-std',
+        overview: 'Originally developed by Bombardier as the CSeries before joining Airbus in 2018, the A220 is a clean-sheet 100–160 seat jetliner featuring a composite wing, aluminum-lithium fuselage, wide 3+2 seating, and ultra-quiet Pratt & Whitney Geared Turbofans.'
+      },
+      {
+        id: 'c919',
+        name: 'COMAC C919',
+        nickname: 'China’s Trunk Narrow-body',
+        manufacturer: 'COMAC',
+        mfgGroup: 'Other',
+        decade: '2010s+',
+        bodyType: 'Narrow-body',
+        fuselageTag: 'Medium-Haul Narrow-body',
+        lengthM: 38.9,
+        lengthFt: 127.6,
+        wingspanM: 35.8,
+        wingspanFt: 117.5,
+        heightM: 11.95,
+        rangeKm: 5555,
+        rangeNm: 3000,
+        maxSeats: 192,
+        typicalSeats: '158–168 (2-class)',
+        variants: ['C919 STD', 'C919 ER'],
+        maidenFlight: 'May 5, 2017 (EIS: May 28, 2023)',
+        maidenYear: 2017,
+        lastProduction: 'In Production',
+        inProduction: true,
+        cruiseSpeed: 'Mach 0.785 (834 km/h)',
+        mtow: '78,900 kg (173,945 lb)',
+        engines: '2× CFM International LEAP-1C',
+        silhouetteType: 'narrow-std',
+        overview: 'Developed by the Commercial Aircraft Corporation of China (COMAC), the C919 entered commercial airline service in May 2023 to compete directly in the core 150–190 seat single-aisle market alongside the Airbus A320neo and Boeing 737 MAX.'
+      }
+    ];
+
+    // =========================================================================
+    // 2. APPLICATION STATE
+    // =========================================================================
+    let state = {
+      search: '',
+      manufacturer: 'All',
+      decade: 'All',
+      body: 'All',
+      sort: 'year-asc',
+      unitSystem: 'metric', // 'metric' | 'imperial'
+      compareList: ['b747', 'a380', 'a350'], // Pre-loaded 3 iconic jets for instant comparison fun
+    };
+
+    // =========================================================================
+    // 3. CUSTOM SVG AIRCRAFT SILHOUETTES (Side Profile & Top-Down Blueprints)
+    // =========================================================================
+    function getAircraftSVG(type, isLarge = false) {
+      const cls = isLarge ? 'w-full h-36 sm:h-44' : 'w-full h-24';
+      switch (type) {
+        case 'quad-double': // Boeing 747 iconic hump
+          return `
+            <svg viewBox="0 0 320 95" class="${cls} text-sky-600 dark:text-sky-400" fill="none">
+              <defs>
+                <linearGradient id="fuselageGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="currentColor" stop-opacity="0.25"/>
+                  <stop offset="100%" stop-color="currentColor" stop-opacity="0.08"/>
+                </linearGradient>
+              </defs>
+              <!-- Tail Fin -->
+              <path d="M25 56 L12 18 L34 18 L56 54 Z" fill="currentColor" fill-opacity="0.3" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              <!-- Main Fuselage with Upper Deck Hump -->
+              <path d="M22 60 C22 54, 40 53, 85 53 L190 53 C206 53, 214 43, 232 43 L274 43 C292 43, 305 53, 310 61 C305 67, 290 69, 265 69 L50 69 C32 69, 22 65, 22 60 Z" fill="url(#fuselageGrad)" stroke="currentColor" stroke-width="2"/>
+              <!-- Cockpit & Upper Deck Windows -->
+              <path d="M286 50 L296 50 L300 54 L286 54 Z" fill="currentColor" fill-opacity="0.7"/>
+              <line x1="226" y1="49" x2="278" y2="49" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 2.5"/>
+              <!-- Main Deck Windows -->
+              <line x1="65" y1="60" x2="282" y2="60" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 3"/>
+              <!-- Swept Wing & Twin Podded Engines -->
+              <path d="M135 63 L188 63 L145 76 L122 76 Z" fill="currentColor" fill-opacity="0.35" stroke="currentColor" stroke-width="1.6"/>
+              <rect x="166" y="72" width="22" height="7" rx="3" fill="currentColor" fill-opacity="0.6"/>
+              <rect x="136" y="75" width="20" height="6.5" rx="3" fill="currentColor" fill-opacity="0.5"/>
+            </svg>`;
+        case 'superjumbo': // Airbus A380 Full Double-Deck
+          return `
+            <svg viewBox="0 0 320 95" class="${cls} text-sky-600 dark:text-sky-400" fill="none">
+              <!-- Tall Tail Fin -->
+              <path d="M24 52 L10 12 L34 12 L58 48 Z" fill="currentColor" fill-opacity="0.3" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              <!-- Full Double-Deck Fuselage -->
+              <path d="M20 58 C20 50, 42 44, 72 44 L268 44 C288 44, 304 52, 310 61 C304 68, 288 71, 265 71 L48 71 C30 71, 20 66, 20 58 Z" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-width="2"/>
+              <!-- Cockpit -->
+              <path d="M290 55 L300 55 L304 59 L290 59 Z" fill="currentColor" fill-opacity="0.75"/>
+              <!-- Two Rows of Windows -->
+              <line x1="68" y1="51" x2="276" y2="51" stroke="currentColor" stroke-width="1.4" stroke-dasharray="2 2.5"/>
+              <line x1="60" y1="61" x2="282" y2="61" stroke="currentColor" stroke-width="1.4" stroke-dasharray="2 2.5"/>
+              <!-- Wing & Engines -->
+              <path d="M132 65 L192 65 L146 78 L120 78 Z" fill="currentColor" fill-opacity="0.35" stroke="currentColor" stroke-width="1.6"/>
+              <rect x="168" y="74" width="23" height="7.5" rx="3" fill="currentColor" fill-opacity="0.6"/>
+              <rect x="136" y="77" width="21" height="7" rx="3" fill="currentColor" fill-opacity="0.5"/>
+            </svg>`;
+        case 'trijet': // DC-10 Tail-Mounted Engine
+          return `
+            <svg viewBox="0 0 320 95" class="${cls} text-sky-600 dark:text-sky-400" fill="none">
+              <!-- Tail Fin with Podded Engine #2 -->
+              <path d="M28 54 L16 16 L36 16 L54 52 Z" fill="currentColor" fill-opacity="0.28" stroke="currentColor" stroke-width="1.8"/>
+              <rect x="14" y="33" width="32" height="9" rx="4" fill="currentColor" fill-opacity="0.5" stroke="currentColor" stroke-width="1.5"/>
+              <!-- Fuselage -->
+              <path d="M24 60 C24 54, 42 51, 68 51 L276 51 C293 51, 304 56, 309 62 C304 67, 292 69, 274 69 L50 69 C32 69, 24 65, 24 60 Z" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="2"/>
+              <path d="M288 55 L298 55 L302 59 L288 59 Z" fill="currentColor" fill-opacity="0.7"/>
+              <line x1="62" y1="59" x2="280" y2="59" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 3"/>
+              <!-- Wing Engine -->
+              <path d="M140 64 L188 64 L152 75 L130 75 Z" fill="currentColor" fill-opacity="0.35" stroke="currentColor" stroke-width="1.6"/>
+              <rect x="162" y="72" width="24" height="7.5" rx="3.5" fill="currentColor" fill-opacity="0.6"/>
+            </svg>`;
+        case 'trijet-sduct': // L-1011 S-duct tail
+          return `
+            <svg viewBox="0 0 320 95" class="${cls} text-sky-600 dark:text-sky-400" fill="none">
+              <!-- S-Duct Tail Intake & Fin -->
+              <path d="M26 53 L14 15 L34 15 L52 51 Z" fill="currentColor" fill-opacity="0.28" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M36 42 L54 42 L50 52 L32 52 Z" fill="currentColor" fill-opacity="0.45" stroke="currentColor" stroke-width="1.4"/>
+              <!-- Fuselage -->
+              <path d="M18 60 C18 54, 40 51, 68 51 L276 51 C293 51, 304 56, 309 62 C304 67, 292 69, 274 69 L50 69 C30 69, 18 65, 18 60 Z" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="2"/>
+              <path d="M288 55 L298 55 L302 59 L288 59 Z" fill="currentColor" fill-opacity="0.7"/>
+              <line x1="62" y1="59" x2="280" y2="59" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 3"/>
+              <!-- Wing Engine -->
+              <path d="M140 64 L188 64 L152 75 L130 75 Z" fill="currentColor" fill-opacity="0.35" stroke="currentColor" stroke-width="1.6"/>
+              <rect x="162" y="72" width="24" height="7.5" rx="3.5" fill="currentColor" fill-opacity="0.6"/>
+            </svg>`;
+        case 'quad-single': // A340 Long Single-Deck Quadjet
+          return `
+            <svg viewBox="0 0 320 95" class="${cls} text-sky-600 dark:text-sky-400" fill="none">
+              <path d="M22 55 L10 18 L30 18 L52 52 Z" fill="currentColor" fill-opacity="0.28" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M16 60 C16 54, 36 51, 62 51 L282 51 C297 51, 307 56, 312 62 C307 67, 295 69, 278 69 L44 69 C26 69, 16 65, 16 60 Z" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="2"/>
+              <path d="M292 55 L301 55 L305 59 L292 59 Z" fill="currentColor" fill-opacity="0.7"/>
+              <line x1="56" y1="59" x2="285" y2="59" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 3"/>
+              <path d="M135 64 L190 64 L148 76 L124 76 Z" fill="currentColor" fill-opacity="0.35" stroke="currentColor" stroke-width="1.6"/>
+              <rect x="166" y="72" width="21" height="6.5" rx="3" fill="currentColor" fill-opacity="0.6"/>
+              <rect x="137" y="75" width="19" height="6" rx="3" fill="currentColor" fill-opacity="0.5"/>
+            </svg>`;
+        case 'wide-twin': // 777 / 787 / A350 / A330 / 767 / A300
+          return `
+            <svg viewBox="0 0 320 95" class="${cls} text-sky-600 dark:text-sky-400" fill="none">
+              <path d="M24 55 L11 17 L32 17 L54 51 Z" fill="currentColor" fill-opacity="0.28" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M18 60 C18 54, 38 50, 66 50 L278 50 C295 50, 306 56, 311 62 C306 67, 294 69, 276 69 L46 69 C28 69, 18 65, 18 60 Z" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="2"/>
+              <path d="M290 55 L300 55 L304 59 L290 59 Z" fill="currentColor" fill-opacity="0.7"/>
+              <line x1="58" y1="58" x2="282" y2="58" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 3"/>
+              <!-- Large High-Bypass Twin Engine -->
+              <path d="M136 63 L192 63 L152 76 L128 76 Z" fill="currentColor" fill-opacity="0.35" stroke="currentColor" stroke-width="1.6"/>
+              <rect x="162" y="71" width="27" height="9" rx="4" fill="currentColor" fill-opacity="0.62"/>
+            </svg>`;
+        case 'narrow-long': // Boeing 757 Slender Silhouette
+          return `
+            <svg viewBox="0 0 320 95" class="${cls} text-sky-600 dark:text-sky-400" fill="none">
+              <path d="M26 57 L14 23 L32 23 L52 54 Z" fill="currentColor" fill-opacity="0.28" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M20 61 C20 56, 38 54, 62 54 L282 54 C296 54, 306 58, 310 63 C306 67, 295 68, 278 68 L46 68 C28 68, 20 65, 20 61 Z" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="2"/>
+              <path d="M291 57 L300 57 L303 60 L291 60 Z" fill="currentColor" fill-opacity="0.7"/>
+              <line x1="56" y1="60" x2="284" y2="60" stroke="currentColor" stroke-width="1.4" stroke-dasharray="2 2.8"/>
+              <path d="M142 64 L186 64 L154 74 L134 74 Z" fill="currentColor" fill-opacity="0.35" stroke="currentColor" stroke-width="1.5"/>
+              <rect x="162" y="70" width="22" height="7" rx="3.5" fill="currentColor" fill-opacity="0.6"/>
+            </svg>`;
+        default: // Narrow-body Standard (A320, 737 MAX, A220, C919, E-Jet)
+          return `
+            <svg viewBox="0 0 320 95" class="${cls} text-sky-600 dark:text-sky-400" fill="none">
+              <path d="M44 56 L32 23 L50 23 L68 53 Z" fill="currentColor" fill-opacity="0.28" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M38 60 C38 55, 54 53, 76 53 L264 53 C279 53, 289 57, 294 62 C289 67, 278 68, 260 68 L62 68 C46 68, 38 65, 38 60 Z" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="2"/>
+              <path d="M274 57 L283 57 L286 60 L274 60 Z" fill="currentColor" fill-opacity="0.7"/>
+              <line x1="72" y1="60" x2="266" y2="60" stroke="currentColor" stroke-width="1.4" stroke-dasharray="2 2.8"/>
+              <path d="M146 64 L188 64 L156 74 L138 74 Z" fill="currentColor" fill-opacity="0.35" stroke="currentColor" stroke-width="1.5"/>
+              <rect x="164" y="70" width="22" height="7.5" rx="3.5" fill="currentColor" fill-opacity="0.6"/>
+            </svg>`;
+      }
+    }
+
+    // =========================================================================
+    // 4. UNIT FORMATTING HELPERS
+    // =========================================================================
+    function formatLength(aircraft) {
+      return state.unitSystem === 'metric'
+        ? `${aircraft.lengthM.toFixed(1)} m`
+        : `${aircraft.lengthFt.toFixed(1)} ft`;
+    }
+
+    function formatWingspan(aircraft) {
+      return state.unitSystem === 'metric'
+        ? `${aircraft.wingspanM.toFixed(1)} m`
+        : `${aircraft.wingspanFt.toFixed(1)} ft`;
+    }
+
+    function formatRange(aircraft) {
+      return state.unitSystem === 'metric'
+        ? `${aircraft.rangeKm.toLocaleString()} km`
+        : `${aircraft.rangeNm.toLocaleString()} nmi`;
+    }
+
+    function toggleUnits() {
+      state.unitSystem = state.unitSystem === 'metric' ? 'imperial' : 'metric';
+      document.getElementById('unitLabel').textContent =
+        state.unitSystem === 'metric' ? 'METRIC (m / km)' : 'IMPERIAL (ft / nmi)';
+      document.getElementById('statMaxRange').innerHTML =
+        state.unitSystem === 'metric'
+          ? '17,964 <span class="text-xs font-normal">km</span>'
+          : '9,700 <span class="text-xs font-normal">nmi</span>';
+      applyFilters();
+      // If compare modal is open, re-render it
+      if (!document.getElementById('compareModal').classList.contains('hidden')) {
+        renderCompareModal();
+      }
+    }
+
+    // =========================================================================
+    // 5. THEME TOGGLE
+    // =========================================================================
+    function toggleTheme() {
+      const html = document.documentElement;
+      html.classList.toggle('dark');
+    }
+
+    // =========================================================================
+    // 6. FILTERING, SEARCHING & SORTING
+    // =========================================================================
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      state.search = e.target.value.trim().toLowerCase();
+      document.getElementById('clearSearchBtn').classList.toggle('hidden', !state.search);
+      applyFilters();
+    });
+
+    function clearSearch() {
+      state.search = '';
+      const input = document.getElementById('searchInput');
+      input.value = '';
+      document.getElementById('clearSearchBtn').classList.add('hidden');
+      applyFilters();
+    }
+
+    function setFilter(category, value) {
+      state[category] = value;
+
+      // Update UI active pill states
+      const containerMap = {
+        manufacturer: 'manufacturerFilters',
+        decade: 'decadeFilters',
+        body: 'bodyFilters'
+      };
+      const container = document.getElementById(containerMap[category]);
+      container.querySelectorAll('.filter-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.filter === value);
+      });
+
+      applyFilters();
+    }
+
+    function resetAllFilters() {
+      state.search = '';
+      state.manufacturer = 'All';
+      state.decade = 'All';
+      state.body = 'All';
+      state.sort = 'year-asc';
+
+      document.getElementById('searchInput').value = '';
+      document.getElementById('clearSearchBtn').classList.add('hidden');
+      document.getElementById('sortSelect').value = 'year-asc';
+
+      ['manufacturer', 'decade', 'body'].forEach(cat => setFilter(cat, 'All'));
+    }
+
+    function applyFilters() {
+      state.sort = document.getElementById('sortSelect').value;
+
+      let filtered = AIRCRAFT_DB.filter(ac => {
+        // Manufacturer filter
+        if (state.manufacturer !== 'All' && ac.mfgGroup !== state.manufacturer) return false;
+        // Decade filter
+        if (state.decade !== 'All' && ac.decade !== state.decade) return false;
+        // Body type filter
+        if (state.body !== 'All' && ac.bodyType !== state.body) return false;
+
+        // Search filter (name, nickname, manufacturer, variants)
+        if (state.search) {
+          const haystack = [
+            ac.name,
+            ac.nickname,
+            ac.manufacturer,
+            ac.decade,
+            ac.fuselageTag,
+            ...ac.variants
+          ].join(' ').toLowerCase();
+          if (!haystack.includes(state.search)) return false;
+        }
+        return true;
+      });
+
+      // Sort
+      filtered.sort((a, b) => {
+        switch (state.sort) {
+          case 'year-asc': return a.maidenYear - b.maidenYear;
+          case 'year-desc': return b.maidenYear - a.maidenYear;
+          case 'range-desc': return b.rangeKm - a.rangeKm;
+          case 'seats-desc': return b.maxSeats - a.maxSeats;
+          case 'wingspan-desc': return b.wingspanM - a.wingspanM;
+          case 'length-desc': return b.lengthM - a.lengthM;
+          default: return 0;
+        }
+      });
+
+      // Update counters & reset visibility
+      document.getElementById('visibleCount').textContent = filtered.length;
+      const hasActiveFilters = state.search || state.manufacturer !== 'All' || state.decade !== 'All' || state.body !== 'All';
+      document.getElementById('resetFiltersBtn').classList.toggle('hidden', !hasActiveFilters);
+
+      renderAircraftCards(filtered);
+    }
+
+    // =========================================================================
+    // 7. RENDER AIRCRAFT GRID CARDS
+    // =========================================================================
+    function renderAircraftCards(list) {
+      const grid = document.getElementById('aircraftGrid');
+      const empty = document.getElementById('emptyState');
+
+      if (list.length === 0) {
+        grid.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+
+      empty.classList.add('hidden');
+      grid.innerHTML = list.map(ac => {
+        const isCompared = state.compareList.includes(ac.id);
+        const statusBadge = ac.inProduction
+          ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-mono font-medium bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>In Production</span>`
+          : `<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-mono font-medium bg-slate-200/80 dark:bg-slate-800 text-slate-600 dark:text-slate-400">Ended ${ac.lastProduction.split(' ')[0]}</span>`;
+
+        // Show up to 4 variant chips + overflow counter
+        const shownVariants = ac.variants.slice(0, 4);
+        const extraVariants = ac.variants.length - shownVariants.length;
+
+        return `
+          <article class="group bg-white dark:bg-aero-900 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-sky-500/60 dark:hover:border-sky-500/60 shadow-sm hover:shadow-xl hover:shadow-sky-500/5 transition-all duration-200 flex flex-col overflow-hidden">
+            <!-- Top Blueprint Header -->
+            <div class="relative px-5 pt-4 pb-2 bg-gradient-to-b from-slate-100/80 to-white dark:from-aero-850/90 dark:to-aero-900 border-b border-slate-100 dark:border-slate-800/80">
+              <div class="flex items-center justify-between gap-2 mb-1">
+                <div class="flex items-center gap-1.5">
+                  <span class="px-2 py-0.5 rounded-md text-[11px] font-mono font-bold uppercase bg-sky-500/15 text-sky-700 dark:text-sky-400">${ac.manufacturer}</span>
+                  <span class="px-2 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-slate-200/70 dark:bg-slate-800 text-slate-600 dark:text-slate-300">${ac.decade}</span>
+                </div>
+                ${statusBadge}
+              </div>
+
+              <!-- Custom SVG Aircraft Profile -->
+              <div class="my-1 transform group-hover:scale-[1.03] transition-transform duration-300 cursor-pointer" onclick="openDetailModal('${ac.id}')">
+                ${getAircraftSVG(ac.silhouetteType, false)}
+              </div>
+
+              <div class="flex items-baseline justify-between gap-2">
+                <h3 onclick="openDetailModal('${ac.id}')" class="text-lg font-extrabold tracking-tight text-slate-900 dark:text-white group-hover:text-sky-600 dark:group-hover:text-sky-400 cursor-pointer transition">
+                  ${ac.name}
+                </h3>
+                <span class="text-[11px] font-mono text-slate-400">${ac.bodyType}</span>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400 truncate">${ac.nickname} • First flight ${ac.maidenYear}</p>
+            </div>
+
+            <!-- Key Telemetry Grid -->
+            <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+              <div class="grid grid-cols-2 gap-2.5">
+                <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-aero-950/70 border border-slate-100 dark:border-slate-800/80">
+                  <div class="text-[10px] font-mono uppercase text-slate-400">Length / Wingspan</div>
+                  <div class="text-xs sm:text-sm font-bold font-mono mt-0.5 text-slate-800 dark:text-slate-100">
+                    ${formatLength(ac)} <span class="text-slate-400 font-normal">/</span> ${formatWingspan(ac)}
+                  </div>
+                </div>
+                <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-aero-950/70 border border-slate-100 dark:border-slate-800/80">
+                  <div class="text-[10px] font-mono uppercase text-slate-400">Max Range</div>
+                  <div class="text-xs sm:text-sm font-bold font-mono mt-0.5 text-sky-600 dark:text-sky-400">
+                    ${formatRange(ac)}
+                  </div>
+                </div>
+                <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-aero-950/70 border border-slate-100 dark:border-slate-800/80">
+                  <div class="text-[10px] font-mono uppercase text-slate-400">Max Seats</div>
+                  <div class="text-xs sm:text-sm font-bold font-mono mt-0.5 text-slate-800 dark:text-slate-100">
+                    ${ac.maxSeats} <span class="text-[11px] font-sans font-normal text-slate-400">exit limit</span>
+                  </div>
+                </div>
+                <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-aero-950/70 border border-slate-100 dark:border-slate-800/80">
+                  <div class="text-[10px] font-mono uppercase text-slate-400">Maiden Flight</div>
+                  <div class="text-xs sm:text-sm font-bold font-mono mt-0.5 text-slate-800 dark:text-slate-100">
+                    ${ac.maidenFlight.split(' (')[0]}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Major Variants Pills -->
+              <div>
+                <div class="text-[10px] font-mono uppercase text-slate-400 mb-1.5">Major Variants</div>
+                <div class="flex flex-wrap gap-1">
+                  ${shownVariants.map(v => `<span class="px-2 py-0.5 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-aero-850 text-slate-700 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700/70">${v}</span>`).join('')}
+                  ${extraVariants > 0 ? `<span class="px-2 py-0.5 rounded-md text-[11px] font-mono bg-sky-500/10 text-sky-600 dark:text-sky-400">+${extraVariants} more</span>` : ''}
+                </div>
+              </div>
+
+              <!-- Card Footer Actions -->
+              <div class="pt-2 flex items-center gap-2 border-t border-slate-100 dark:border-slate-800/80">
+                <button onclick="openDetailModal('${ac.id}')"
+                  class="flex-1 py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-sky-600 dark:hover:bg-sky-500 text-white text-xs font-semibold transition text-center">
+                  View Full Specs
+                </button>
+                <button onclick="toggleCompare('${ac.id}')"
+                  class="py-2 px-3 rounded-xl text-xs font-semibold border transition flex items-center gap-1.5 ${
+                    isCompared
+                      ? 'bg-amber-500/15 border-amber-500/50 text-amber-600 dark:text-amber-400'
+                      : 'bg-slate-50 dark:bg-aero-850 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-sky-500'
+                  }">
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                    ${isCompared
+                      ? '<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />'
+                      : '<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />'}
+                  </svg>
+                  <span>${isCompared ? 'Added' : 'Compare'}</span>
+                </button>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // 8. FULL SPECIFICATIONS DETAIL MODAL
+    // =========================================================================
+    function openDetailModal(id) {
+      const ac = AIRCRAFT_DB.find(item => item.id === id);
+      if (!ac) return;
+
+      document.getElementById('modalManufacturerBadge').textContent = ac.manufacturer;
+      document.getElementById('modalEraBadge').textContent = `${ac.decade} • ${ac.fuselageTag}`;
+      document.getElementById('modalTitle').textContent = `${ac.name} — "${ac.nickname}"`;
+
+      const statusEl = document.getElementById('modalStatusBadge');
+      if (ac.inProduction) {
+        statusEl.className = 'px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400';
+        statusEl.textContent = ac.lastProduction;
+      } else {
+        statusEl.className = 'px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300';
+        statusEl.textContent = `Ended: ${ac.lastProduction}`;
+      }
+
+      const isCompared = state.compareList.includes(ac.id);
+      const modalCompBtn = document.getElementById('modalCompareBtn');
+      modalCompBtn.textContent = isCompared ? '✓ In Comparison' : '+ Add to Compare';
+      modalCompBtn.onclick = () => {
+        toggleCompare(ac.id);
+        openDetailModal(ac.id); // refresh button text
+      };
+
+      // Calculate relative scale bars against largest benchmarks (A380 / A350-900ULR)
+      const lenPct = Math.min(100, Math.round((ac.lengthM / 76.3) * 100));
+      const spanPct = Math.min(100, Math.round((ac.wingspanM / 79.8) * 100));
+      const rangePct = Math.min(100, Math.round((ac.rangeKm / 17964) * 100));
+      const seatPct = Math.min(100, Math.round((ac.maxSeats / 853) * 100));
+
+      document.getElementById('modalBody').innerHTML = `
+        <!-- Blueprint Hero Card -->
+        <div class="p-4 sm:p-6 rounded-2xl bg-slate-50 dark:bg-aero-950 border border-slate-200/80 dark:border-slate-800 relative overflow-hidden">
+          <div class="absolute inset-0 opacity-[0.06] pointer-events-none"
+               style="background-image: linear-gradient(to right, #38bdf8 1px, transparent 1px), linear-gradient(to bottom, #38bdf8 1px, transparent 1px); background-size: 24px 24px;"></div>
+          ${getAircraftSVG(ac.silhouetteType, true)}
+          <p class="mt-3 text-sm text-slate-600 dark:text-slate-300 leading-relaxed relative">
+            ${ac.overview}
+          </p>
+        </div>
+
+        <!-- Complete Technical Data Sheet -->
+        <div>
+          <h3 class="text-xs font-mono uppercase tracking-wider text-slate-400 mb-3">Technical Specifications & Timeline</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-aero-850/60 border border-slate-200/70 dark:border-slate-800">
+              <div class="text-[11px] font-mono text-slate-400">Overall Length</div>
+              <div class="text-base font-bold font-mono mt-0.5">${ac.lengthM} m <span class="text-xs font-normal text-slate-400">(${ac.lengthFt} ft)</span></div>
+            </div>
+            <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-aero-850/60 border border-slate-200/70 dark:border-slate-800">
+              <div class="text-[11px] font-mono text-slate-400">Wingspan</div>
+              <div class="text-base font-bold font-mono mt-0.5">${ac.wingspanM} m <span class="text-xs font-normal text-slate-400">(${ac.wingspanFt} ft)</span></div>
+            </div>
+            <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-aero-850/60 border border-slate-200/70 dark:border-slate-800">
+              <div class="text-[11px] font-mono text-slate-400">Maximum Range</div>
+              <div class="text-base font-bold font-mono text-sky-600 dark:text-sky-400 mt-0.5">${ac.rangeKm.toLocaleString()} km <span class="text-xs font-normal text-slate-400">(${ac.rangeNm.toLocaleString()} nmi)</span></div>
+            </div>
+            <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-aero-850/60 border border-slate-200/70 dark:border-slate-800">
+              <div class="text-[11px] font-mono text-slate-400">Max Seats (Exit Limit)</div>
+              <div class="text-base font-bold font-mono mt-0.5">${ac.maxSeats} passengers</div>
+            </div>
+            <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-aero-850/60 border border-slate-200/70 dark:border-slate-800">
+              <div class="text-[11px] font-mono text-slate-400">Typical Cabin Layout</div>
+              <div class="text-sm font-semibold mt-0.5">${ac.typicalSeats}</div>
+            </div>
+            <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-aero-850/60 border border-slate-200/70 dark:border-slate-800">
+              <div class="text-[11px] font-mono text-slate-400">Cruise Speed</div>
+              <div class="text-sm font-bold font-mono mt-0.5">${ac.cruiseSpeed}</div>
+            </div>
+            <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-aero-850/60 border border-slate-200/70 dark:border-slate-800">
+              <div class="text-[11px] font-mono text-slate-400">Maiden Flight / EIS</div>
+              <div class="text-sm font-semibold mt-0.5">${ac.maidenFlight}</div>
+            </div>
+            <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-aero-850/60 border border-slate-200/70 dark:border-slate-800">
+              <div class="text-[11px] font-mono text-slate-400">Last Production / Status</div>
+              <div class="text-sm font-semibold mt-0.5">${ac.lastProduction}</div>
+            </div>
+            <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-aero-850/60 border border-slate-200/70 dark:border-slate-800">
+              <div class="text-[11px] font-mono text-slate-400">Max Takeoff Weight (MTOW)</div>
+              <div class="text-sm font-bold font-mono mt-0.5">${ac.mtow}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Powerplant & Variants -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-aero-850/60 border border-slate-200/70 dark:border-slate-800">
+            <div class="text-xs font-mono uppercase text-slate-400 mb-2">Powerplants / Engines</div>
+            <p class="text-sm font-medium text-slate-800 dark:text-slate-200">${ac.engines}</p>
+            <div class="mt-3 pt-3 border-t border-slate-200/70 dark:border-slate-700/70 flex justify-between text-xs font-mono text-slate-500">
+              <span>Tail Height: <strong class="text-slate-800 dark:text-slate-200">${ac.heightM} m</strong></span>
+              <span>Body: <strong class="text-slate-800 dark:text-slate-200">${ac.bodyType}</strong></span>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-aero-850/60 border border-slate-200/70 dark:border-slate-800">
+            <div class="text-xs font-mono uppercase text-slate-400 mb-2">Production Variants (${ac.variants.length})</div>
+            <div class="flex flex-wrap gap-1.5">
+              ${ac.variants.map(v => `<span class="px-2.5 py-1 rounded-lg text-xs font-mono font-semibold bg-white dark:bg-aero-950 border border-slate-200 dark:border-slate-700 text-sky-700 dark:text-sky-400">${v}</span>`).join('')}
+            </div>
+          </div>
+        </div>
+
+        <!-- Relative Fleet Benchmark Bars -->
+        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-aero-950/70 border border-slate-200/70 dark:border-slate-800 space-y-3">
+          <div class="text-xs font-mono uppercase text-slate-400">Benchmark Scale vs. Largest Commercial Jets</div>
+          <div class="space-y-2.5 text-xs font-mono">
+            <div>
+              <div class="flex justify-between mb-1"><span>Length (${ac.lengthM}m vs 76.3m max)</span><span>${lenPct}%</span></div>
+              <div class="w-full h-2 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+                <div class="h-full bg-sky-500 rounded-full" style="width: ${lenPct}%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-1"><span>Wingspan (${ac.wingspanM}m vs 79.8m A380)</span><span>${spanPct}%</span></div>
+              <div class="w-full h-2 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+                <div class="h-full bg-indigo-500 rounded-full" style="width: ${spanPct}%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-1"><span>Range (${ac.rangeKm.toLocaleString()}km vs 17,964km A350ULR)</span><span>${rangePct}%</span></div>
+              <div class="w-full h-2 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+                <div class="h-full bg-emerald-500 rounded-full" style="width: ${rangePct}%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-1"><span>Max Seating (${ac.maxSeats} vs 853 A380)</span><span>${seatPct}%</span></div>
+              <div class="w-full h-2 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+                <div class="h-full bg-amber-500 rounded-full" style="width: ${seatPct}%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const modal = document.getElementById('detailModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeDetailModal() {
+      const modal = document.getElementById('detailModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    // =========================================================================
+    // 9. SIDE-BY-SIDE COMPARISON STUDIO
+    // =========================================================================
+    function toggleCompare(id) {
+      const idx = state.compareList.indexOf(id);
+      if (idx > -1) {
+        state.compareList.splice(idx, 1);
+        showToast('Removed aircraft from comparison tray');
+      } else {
+        if (state.compareList.length >= 3) {
+          showToast('Maximum 3 aircraft can be compared at once. Remove one first.');
+          return;
+        }
+        state.compareList.push(id);
+        const ac = AIRCRAFT_DB.find(a => a.id === id);
+        showToast(`Added ${ac.name} to comparison (${state.compareList.length}/3)`);
+      }
+      updateCompareUI();
+      applyFilters();
+    }
+
+    function clearCompare() {
+      state.compareList = [];
+      updateCompareUI();
+      applyFilters();
+      if (!document.getElementById('compareModal').classList.contains('hidden')) {
+        renderCompareModal();
+      }
+    }
+
+    function updateCompareUI() {
+      const count = state.compareList.length;
+      document.getElementById('compareBadge').textContent = count;
+
+      const bar = document.getElementById('floatingCompareBar');
+      const chips = document.getElementById('compareChipsContainer');
+
+      if (count === 0) {
+        bar.classList.add('hidden');
+        return;
+      }
+
+      bar.classList.remove('hidden');
+      chips.innerHTML = state.compareList.map(id => {
+        const ac = AIRCRAFT_DB.find(a => a.id === id);
+        return `
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-xs font-medium whitespace-nowrap">
+            <span class="text-sky-400 font-mono font-bold">${ac.name}</span>
+            <button onclick="toggleCompare('${ac.id}')" class="text-slate-400 hover:text-white">×</button>
+          </span>
+        `;
+      }).join('');
+    }
+
+    function openCompareModal() {
+      renderCompareModal();
+      const modal = document.getElementById('compareModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeCompareModal() {
+      const modal = document.getElementById('compareModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function addAircraftFromSelector(selectEl) {
+      const id = selectEl.value;
+      if (!id) return;
+      if (!state.compareList.includes(id) && state.compareList.length < 3) {
+        state.compareList.push(id);
+        updateCompareUI();
+        applyFilters();
+        renderCompareModal();
+      }
+    }
+
+    function renderCompareModal() {
+      const container = document.getElementById('compareModalBody');
+      const selected = state.compareList.map(id => AIRCRAFT_DB.find(a => a.id === id)).filter(Boolean);
+
+      // Quick Add Dropdown if fewer than 3 aircraft selected
+      const availableToAdd = AIRCRAFT_DB.filter(a => !state.compareList.includes(a.id));
+      const selectorHTML = selected.length < 3 ? `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-sky-500/10 border border-sky-500/20">
+          <div class="text-xs sm:text-sm font-medium text-sky-900 dark:text-sky-200">
+            Slot ${selected.length + 1} of 3 available — add another airliner to compare:
+          </div>
+          <select onchange="addAircraftFromSelector(this)"
+            class="px-3.5 py-2 rounded-xl bg-white dark:bg-aero-950 border border-slate-300 dark:border-slate-700 text-xs sm:text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-sky-500">
+            <option value="">+ Select aircraft...</option>
+            ${availableToAdd.map(a => `<option value="${a.id}">${a.name} (${a.decade})</option>`).join('')}
+          </select>
+        </div>
+      ` : '';
+
+      if (selected.length === 0) {
+        container.innerHTML = `
+          ${selectorHTML}
+          <div class="text-center py-12 text-slate-500 dark:text-slate-400">
+            <p class="text-base font-semibold">No aircraft currently selected for comparison.</p>
+            <p class="text-xs mt-1">Use the dropdown above or click "+ Compare" on any aircraft card.</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Compute max values among selected for visual bar charts
+      const maxLen = Math.max(...selected.map(a => a.lengthM));
+      const maxSpan = Math.max(...selected.map(a => a.wingspanM));
+      const maxRange = Math.max(...selected.map(a => a.rangeKm));
+      const maxSeats = Math.max(...selected.map(a => a.maxSeats));
+
+      const barColors = ['bg-sky-500', 'bg-emerald-500', 'bg-amber-500'];
+
+      container.innerHTML = `
+        ${selectorHTML}
+
+        <!-- Side-by-Side Header Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-${selected.length} gap-4">
+          ${selected.map((ac, idx) => `
+            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-aero-950 border border-slate-200 dark:border-slate-800 relative">
+              <button onclick="toggleCompare('${ac.id}'); renderCompareModal();" title="Remove from comparison"
+                class="absolute top-3 right-3 w-7 h-7 rounded-lg bg-slate-200/80 dark:bg-slate-800 hover:bg-red-500 hover:text-white text-xs font-bold transition">✕</button>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="w-2.5 h-2.5 rounded-full ${barColors[idx]}"></span>
+                <span class="text-[11px] font-mono uppercase text-slate-400">${ac.manufacturer} • ${ac.decade}</span>
+              </div>
+              <h3 class="text-lg font-extrabold">${ac.name}</h3>
+              <div class="my-2">${getAircraftSVG(ac.silhouetteType, false)}</div>
+            </div>
+          `).join('')}
+        </div>
+
+        <!-- Visual Comparison Bar Charts -->
+        <div class="p-5 rounded-2xl bg-slate-50 dark:bg-aero-950/80 border border-slate-200 dark:border-slate-800 space-y-5">
+          <h4 class="text-xs font-mono uppercase tracking-wider text-slate-400">Visual Performance & Dimension Bars</h4>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Length Chart -->
+            <div class="space-y-2">
+              <div class="text-xs font-bold">Fuselage Length</div>
+              ${selected.map((ac, idx) => `
+                <div class="space-y-1">
+                  <div class="flex justify-between text-xs font-mono">
+                    <span>${ac.name}</span>
+                    <span class="font-bold">${formatLength(ac)}</span>
+                  </div>
+                  <div class="w-full h-2.5 rounded-full bg-slate-200 dark:bg-slate-800">
+                    <div class="h-full rounded-full ${barColors[idx]} transition-all duration-500" style="width: ${(ac.lengthM / maxLen) * 100}%"></div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+
+            <!-- Wingspan Chart -->
+            <div class="space-y-2">
+              <div class="text-xs font-bold">Wingspan</div>
+              ${selected.map((ac, idx) => `
+                <div class="space-y-1">
+                  <div class="flex justify-between text-xs font-mono">
+                    <span>${ac.name}</span>
+                    <span class="font-bold">${formatWingspan(ac)}</span>
+                  </div>
+                  <div class="w-full h-2.5 rounded-full bg-slate-200 dark:bg-slate-800">
+                    <div class="h-full rounded-full ${barColors[idx]} transition-all duration-500" style="width: ${(ac.wingspanM / maxSpan) * 100}%"></div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+
+            <!-- Range Chart -->
+            <div class="space-y-2">
+              <div class="text-xs font-bold">Maximum Range</div>
+              ${selected.map((ac, idx) => `
+                <div class="space-y-1">
+                  <div class="flex justify-between text-xs font-mono">
+                    <span>${ac.name}</span>
+                    <span class="font-bold">${formatRange(ac)}</span>
+                  </div>
+                  <div class="w-full h-2.5 rounded-full bg-slate-200 dark:bg-slate-800">
+                    <div class="h-full rounded-full ${barColors[idx]} transition-all duration-500" style="width: ${(ac.rangeKm / maxRange) * 100}%"></div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+
+            <!-- Max Seats Chart -->
+            <div class="space-y-2">
+              <div class="text-xs font-bold">Maximum Seats (1-Class Exit Limit)</div>
+              ${selected.map((ac, idx) => `
+                <div class="space-y-1">
+                  <div class="flex justify-between text-xs font-mono">
+                    <span>${ac.name}</span>
+                    <span class="font-bold">${ac.maxSeats} pax</span>
+                  </div>
+                  <div class="w-full h-2.5 rounded-full bg-slate-200 dark:bg-slate-800">
+                    <div class="h-full rounded-full ${barColors[idx]} transition-all duration-500" style="width: ${(ac.maxSeats / maxSeats) * 100}%"></div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+
+        <!-- Structured Comparison Table -->
+        <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr class="bg-slate-100 dark:bg-aero-850 border-b border-slate-200 dark:border-slate-800">
+                <th class="p-3.5 font-mono text-xs uppercase text-slate-500 dark:text-slate-400">Specification</th>
+                ${selected.map(ac => `<th class="p-3.5 font-extrabold">${ac.name}</th>`).join('')}
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+              <tr>
+                <td class="p-3.5 font-mono text-xs text-slate-500">Manufacturer / Era</td>
+                ${selected.map(ac => `<td class="p-3.5 font-medium">${ac.manufacturer} (${ac.decade})</td>`).join('')}
+              </tr>
+              <tr>
+                <td class="p-3.5 font-mono text-xs text-slate-500">Body Configuration</td>
+                ${selected.map(ac => `<td class="p-3.5">${ac.fuselageTag}</td>`).join('')}
+              </tr>
+              <tr>
+                <td class="p-3.5 font-mono text-xs text-slate-500">Length</td>
+                ${selected.map(ac => `<td class="p-3.5 font-mono font-bold">${ac.lengthM} m / ${ac.lengthFt} ft</td>`).join('')}
+              </tr>
+              <tr>
+                <td class="p-3.5 font-mono text-xs text-slate-500">Wingspan</td>
+                ${selected.map(ac => `<td class="p-3.5 font-mono font-bold">${ac.wingspanM} m / ${ac.wingspanFt} ft</td>`).join('')}
+              </tr>
+              <tr>
+                <td class="p-3.5 font-mono text-xs text-slate-500">Maximum Range</td>
+                ${selected.map(ac => `<td class="p-3.5 font-mono font-bold text-sky-600 dark:text-sky-400">${ac.rangeKm.toLocaleString()} km / ${ac.rangeNm.toLocaleString()} nmi</td>`).join('')}
+              </tr>
+              <tr>
+                <td class="p-3.5 font-mono text-xs text-slate-500">Max Seats / Typical</td>
+                ${selected.map(ac => `<td class="p-3.5"><strong class="font-mono">${ac.maxSeats}</strong> max <span class="text-xs text-slate-400 block">${ac.typicalSeats}</span></td>`).join('')}
+              </tr>
+              <tr>
+                <td class="p-3.5 font-mono text-xs text-slate-500">Maiden Flight</td>
+                ${selected.map(ac => `<td class="p-3.5 text-xs">${ac.maidenFlight}</td>`).join('')}
+              </tr>
+              <tr>
+                <td class="p-3.5 font-mono text-xs text-slate-500">Last Production</td>
+                ${selected.map(ac => `<td class="p-3.5 font-semibold ${ac.inProduction ? 'text-emerald-600 dark:text-emerald-400' : ''}">${ac.lastProduction}</td>`).join('')}
+              </tr>
+              <tr>
+                <td class="p-3.5 font-mono text-xs text-slate-500">Cruise Speed & MTOW</td>
+                ${selected.map(ac => `<td class="p-3.5 font-mono text-xs">${ac.cruiseSpeed}<br><span class="text-slate-400">${ac.mtow}</span></td>`).join('')}
+              </tr>
+              <tr>
+                <td class="p-3.5 font-mono text-xs text-slate-500">Key Variants</td>
+                ${selected.map(ac => `<td class="p-3.5 text-xs font-mono">${ac.variants.join(', ')}</td>`).join('')}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 10. TOAST & KEYBOARD ESCAPE LISTENERS
+    // =========================================================================
+    let toastTimer = null;
+    function showToast(msg) {
+      const toast = document.getElementById('toastNotification');
+      document.getElementById('toastMessage').textContent = msg;
+      toast.classList.remove('translate-x-full', 'opacity-0');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('translate-x-full', 'opacity-0');
+      }, 2800);
+    }
+
+    // Close modals on Escape key or backdrop click
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeDetailModal();
+        closeCompareModal();
+      }
+    });
+
+    document.getElementById('detailModal').addEventListener('click', (e) => {
+      if (e.target.id === 'detailModal') closeDetailModal();
+    });
+
+    document.getElementById('compareModal').addEventListener('click', (e) => {
+      if (e.target.id === 'compareModal') closeCompareModal();
+    });
+
+    // =========================================================================
+    // 11. INITIALIZE ON LOAD
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('statTotalCount').textContent = AIRCRAFT_DB.length;
+      updateCompareUI();
+      applyFilters();
+    });
+  </script>
+</body>
+  </html>
