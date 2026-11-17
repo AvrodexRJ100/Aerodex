@@ -354,9 +354,7 @@
 
   <!-- Main Application Script -->
   <script>
-    // =========================================================================
-    // 1. COMMERCIAL AIRCRAFT DATABASE (1970s – 2020s)
-    // =========================================================================
+    
     const AIRCRAFT_DB = [
       {
         id: 'b747',
@@ -854,26 +852,22 @@
       }
     ];
 
-    // =========================================================================
-    // 2. APPLICATION STATE
-    // =========================================================================
+    
     let state = {
       search: '',
       manufacturer: 'All',
       decade: 'All',
       body: 'All',
       sort: 'year-asc',
-      unitSystem: 'metric', // 'metric' | 'imperial'
-      compareList: ['b747', 'a380', 'a350'], // Pre-loaded 3 iconic jets for instant comparison fun
+      unitSystem: 'metric', 
+      compareList: ['b747', 'a380', 'a350'], 
     };
 
-    // =========================================================================
-    // 3. CUSTOM SVG AIRCRAFT SILHOUETTES (Side Profile & Top-Down Blueprints)
-    // =========================================================================
+    
     function getAircraftSVG(type, isLarge = false) {
       const cls = isLarge ? 'w-full h-36 sm:h-44' : 'w-full h-24';
       switch (type) {
-        case 'quad-double': // Boeing 747 iconic hump
+        case 'quad-double': 
           return `
             <svg viewBox="0 0 320 95" class="${cls} text-sky-600 dark:text-sky-400" fill="none">
               <defs>
@@ -896,7 +890,7 @@
               <rect x="166" y="72" width="22" height="7" rx="3" fill="currentColor" fill-opacity="0.6"/>
               <rect x="136" y="75" width="20" height="6.5" rx="3" fill="currentColor" fill-opacity="0.5"/>
             </svg>`;
-        case 'superjumbo': // Airbus A380 Full Double-Deck
+        case 'superjumbo': 
           return `
             <svg viewBox="0 0 320 95" class="${cls} text-sky-600 dark:text-sky-400" fill="none">
               <!-- Tall Tail Fin -->
@@ -913,7 +907,7 @@
               <rect x="168" y="74" width="23" height="7.5" rx="3" fill="currentColor" fill-opacity="0.6"/>
               <rect x="136" y="77" width="21" height="7" rx="3" fill="currentColor" fill-opacity="0.5"/>
             </svg>`;
-        case 'trijet': // DC-10 Tail-Mounted Engine
+        case 'trijet': 
           return `
             <svg viewBox="0 0 320 95" class="${cls} text-sky-600 dark:text-sky-400" fill="none">
               <!-- Tail Fin with Podded Engine #2 -->
@@ -927,7 +921,7 @@
               <path d="M140 64 L188 64 L152 75 L130 75 Z" fill="currentColor" fill-opacity="0.35" stroke="currentColor" stroke-width="1.6"/>
               <rect x="162" y="72" width="24" height="7.5" rx="3.5" fill="currentColor" fill-opacity="0.6"/>
             </svg>`;
-        case 'trijet-sduct': // L-1011 S-duct tail
+        case 'trijet-sduct': 
           return `
             <svg viewBox="0 0 320 95" class="${cls} text-sky-600 dark:text-sky-400" fill="none">
               <!-- S-Duct Tail Intake & Fin -->
@@ -941,7 +935,7 @@
               <path d="M140 64 L188 64 L152 75 L130 75 Z" fill="currentColor" fill-opacity="0.35" stroke="currentColor" stroke-width="1.6"/>
               <rect x="162" y="72" width="24" height="7.5" rx="3.5" fill="currentColor" fill-opacity="0.6"/>
             </svg>`;
-        case 'quad-single': // A340 Long Single-Deck Quadjet
+        case 'quad-single': 
           return `
             <svg viewBox="0 0 320 95" class="${cls} text-sky-600 dark:text-sky-400" fill="none">
               <path d="M22 55 L10 18 L30 18 L52 52 Z" fill="currentColor" fill-opacity="0.28" stroke="currentColor" stroke-width="1.8"/>
@@ -952,7 +946,7 @@
               <rect x="166" y="72" width="21" height="6.5" rx="3" fill="currentColor" fill-opacity="0.6"/>
               <rect x="137" y="75" width="19" height="6" rx="3" fill="currentColor" fill-opacity="0.5"/>
             </svg>`;
-        case 'wide-twin': // 777 / 787 / A350 / A330 / 767 / A300
+        case 'wide-twin': 
           return `
             <svg viewBox="0 0 320 95" class="${cls} text-sky-600 dark:text-sky-400" fill="none">
               <path d="M24 55 L11 17 L32 17 L54 51 Z" fill="currentColor" fill-opacity="0.28" stroke="currentColor" stroke-width="1.8"/>
@@ -963,7 +957,7 @@
               <path d="M136 63 L192 63 L152 76 L128 76 Z" fill="currentColor" fill-opacity="0.35" stroke="currentColor" stroke-width="1.6"/>
               <rect x="162" y="71" width="27" height="9" rx="4" fill="currentColor" fill-opacity="0.62"/>
             </svg>`;
-        case 'narrow-long': // Boeing 757 Slender Silhouette
+        case 'narrow-long': 
           return `
             <svg viewBox="0 0 320 95" class="${cls} text-sky-600 dark:text-sky-400" fill="none">
               <path d="M26 57 L14 23 L32 23 L52 54 Z" fill="currentColor" fill-opacity="0.28" stroke="currentColor" stroke-width="1.8"/>
@@ -973,7 +967,7 @@
               <path d="M142 64 L186 64 L154 74 L134 74 Z" fill="currentColor" fill-opacity="0.35" stroke="currentColor" stroke-width="1.5"/>
               <rect x="162" y="70" width="22" height="7" rx="3.5" fill="currentColor" fill-opacity="0.6"/>
             </svg>`;
-        default: // Narrow-body Standard (A320, 737 MAX, A220, C919, E-Jet)
+        default: 
           return `
             <svg viewBox="0 0 320 95" class="${cls} text-sky-600 dark:text-sky-400" fill="none">
               <path d="M44 56 L32 23 L50 23 L68 53 Z" fill="currentColor" fill-opacity="0.28" stroke="currentColor" stroke-width="1.8"/>
@@ -986,9 +980,7 @@
       }
     }
 
-    // =========================================================================
-    // 4. UNIT FORMATTING HELPERS
-    // =========================================================================
+    
     function formatLength(aircraft) {
       return state.unitSystem === 'metric'
         ? `${aircraft.lengthM.toFixed(1)} m`
@@ -1016,23 +1008,19 @@
           ? '17,964 <span class="text-xs font-normal">km</span>'
           : '9,700 <span class="text-xs font-normal">nmi</span>';
       applyFilters();
-      // If compare modal is open, re-render it
+      
       if (!document.getElementById('compareModal').classList.contains('hidden')) {
         renderCompareModal();
       }
     }
 
-    // =========================================================================
-    // 5. THEME TOGGLE
-    // =========================================================================
+    
     function toggleTheme() {
       const html = document.documentElement;
       html.classList.toggle('dark');
     }
 
-    // =========================================================================
-    // 6. FILTERING, SEARCHING & SORTING
-    // =========================================================================
+    
     document.getElementById('searchInput').addEventListener('input', (e) => {
       state.search = e.target.value.trim().toLowerCase();
       document.getElementById('clearSearchBtn').classList.toggle('hidden', !state.search);
@@ -1050,7 +1038,7 @@
     function setFilter(category, value) {
       state[category] = value;
 
-      // Update UI active pill states
+      
       const containerMap = {
         manufacturer: 'manufacturerFilters',
         decade: 'decadeFilters',
@@ -1082,14 +1070,14 @@
       state.sort = document.getElementById('sortSelect').value;
 
       let filtered = AIRCRAFT_DB.filter(ac => {
-        // Manufacturer filter
+        
         if (state.manufacturer !== 'All' && ac.mfgGroup !== state.manufacturer) return false;
-        // Decade filter
+        
         if (state.decade !== 'All' && ac.decade !== state.decade) return false;
-        // Body type filter
+        
         if (state.body !== 'All' && ac.bodyType !== state.body) return false;
 
-        // Search filter (name, nickname, manufacturer, variants)
+        
         if (state.search) {
           const haystack = [
             ac.name,
@@ -1104,7 +1092,7 @@
         return true;
       });
 
-      // Sort
+      
       filtered.sort((a, b) => {
         switch (state.sort) {
           case 'year-asc': return a.maidenYear - b.maidenYear;
@@ -1117,7 +1105,7 @@
         }
       });
 
-      // Update counters & reset visibility
+      
       document.getElementById('visibleCount').textContent = filtered.length;
       const hasActiveFilters = state.search || state.manufacturer !== 'All' || state.decade !== 'All' || state.body !== 'All';
       document.getElementById('resetFiltersBtn').classList.toggle('hidden', !hasActiveFilters);
@@ -1125,9 +1113,7 @@
       renderAircraftCards(filtered);
     }
 
-    // =========================================================================
-    // 7. RENDER AIRCRAFT GRID CARDS
-    // =========================================================================
+    
     function renderAircraftCards(list) {
       const grid = document.getElementById('aircraftGrid');
       const empty = document.getElementById('emptyState');
@@ -1145,7 +1131,7 @@
           ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-mono font-medium bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>In Production</span>`
           : `<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-mono font-medium bg-slate-200/80 dark:bg-slate-800 text-slate-600 dark:text-slate-400">Ended ${ac.lastProduction.split(' ')[0]}</span>`;
 
-        // Show up to 4 variant chips + overflow counter
+         
         const shownVariants = ac.variants.slice(0, 4);
         const extraVariants = ac.variants.length - shownVariants.length;
 
@@ -1239,9 +1225,7 @@
       }).join('');
     }
 
-    // =========================================================================
-    // 8. FULL SPECIFICATIONS DETAIL MODAL
-    // =========================================================================
+    
     function openDetailModal(id) {
       const ac = AIRCRAFT_DB.find(item => item.id === id);
       if (!ac) return;
@@ -1264,10 +1248,10 @@
       modalCompBtn.textContent = isCompared ? '✓ In Comparison' : '+ Add to Compare';
       modalCompBtn.onclick = () => {
         toggleCompare(ac.id);
-        openDetailModal(ac.id); // refresh button text
+        openDetailModal(ac.id); 
       };
 
-      // Calculate relative scale bars against largest benchmarks (A380 / A350-900ULR)
+      
       const lenPct = Math.min(100, Math.round((ac.lengthM / 76.3) * 100));
       const spanPct = Math.min(100, Math.round((ac.wingspanM / 79.8) * 100));
       const rangePct = Math.min(100, Math.round((ac.rangeKm / 17964) * 100));
@@ -1389,9 +1373,7 @@
       modal.classList.remove('flex');
     }
 
-    // =========================================================================
-    // 9. SIDE-BY-SIDE COMPARISON STUDIO
-    // =========================================================================
+    
     function toggleCompare(id) {
       const idx = state.compareList.indexOf(id);
       if (idx > -1) {
@@ -1471,7 +1453,7 @@
       const container = document.getElementById('compareModalBody');
       const selected = state.compareList.map(id => AIRCRAFT_DB.find(a => a.id === id)).filter(Boolean);
 
-      // Quick Add Dropdown if fewer than 3 aircraft selected
+      
       const availableToAdd = AIRCRAFT_DB.filter(a => !state.compareList.includes(a.id));
       const selectorHTML = selected.length < 3 ? `
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-sky-500/10 border border-sky-500/20">
@@ -1497,7 +1479,7 @@
         return;
       }
 
-      // Compute max values among selected for visual bar charts
+      
       const maxLen = Math.max(...selected.map(a => a.lengthM));
       const maxSpan = Math.max(...selected.map(a => a.wingspanM));
       const maxRange = Math.max(...selected.map(a => a.rangeKm));
@@ -1651,9 +1633,7 @@
       `;
     }
 
-    // =========================================================================
-    // 10. TOAST & KEYBOARD ESCAPE LISTENERS
-    // =========================================================================
+    
     let toastTimer = null;
     function showToast(msg) {
       const toast = document.getElementById('toastNotification');
@@ -1665,7 +1645,7 @@
       }, 2800);
     }
 
-    // Close modals on Escape key or backdrop click
+    
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeDetailModal();
@@ -1681,9 +1661,7 @@
       if (e.target.id === 'compareModal') closeCompareModal();
     });
 
-    // =========================================================================
-    // 11. INITIALIZE ON LOAD
-    // =========================================================================
+    /
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('statTotalCount').textContent = AIRCRAFT_DB.length;
       updateCompareUI();
@@ -1691,4 +1669,4 @@
     });
   </script>
 </body>
-  </html>
+            </html>
